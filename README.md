@@ -1,5 +1,5 @@
 # 🚀 BanVic Analytics Challenge — Indicium 2025  
-**Autor:** Gabriel [Seu Sobrenome]  
+**Autor:** Gabriel Nunes Barbosa Nogueira
 **Projeto:** BANVIC_ANALYTICS_PROJECT  
 **Ferramentas:** dbt, BigQuery, SQL, YAML, Git
 
