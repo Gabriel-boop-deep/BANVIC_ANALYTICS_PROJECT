@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: dim_bap_agencia
+    description: Dimensão de agências do BanVic, com informações de abertura e tipo.
+    columns:
+      - name: agencia_sk
+        description: Chave substituta única da agência.
+        tests:
+          - not_null
+          - unique
+      - name: id_agencia
+        description: Código da agência.
+      - name: nome_agencia
+        description: Nome da agência.
+      - name: data_abertura
+        description: Data de abertura da agência.
+      - name: tipo_agencia
+        description: Tipo da agência.

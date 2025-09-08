@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: dim_bap_cliente
+    description: Dimensão de clientes do BanVic, com dados pessoais e data de inclusão.
+    columns:
+      - name: cliente_sk
+        description: Chave substituta única do cliente.
+        tests:
+          - not_null
+          - unique
+      - name: id_agencia
+        description: Código da agência vinculada ao cliente.
+      - name: nome_cliente
+        description: Primeiro nome do cliente.
+      - name: sobrenome_cliente
+        description: Sobrenome do cliente.
+      - name: email_cliente
+        description: Email cadastrado do cliente.
+      - name: data_inclusao
+        description: Data de inclusão no formato dd-mm-yyyy.

@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: dim_bap_colaborador
+    description: Dimensão de colaboradores do BanVic.
+    columns:
+      - name: colaborador_sk
+        description: Chave substituta única do colaborador.
+        tests:
+          - not_null
+          - unique
+      - name: id_colaborador
+        description: Código do colaborador.
+      - name: nome_colaborador
+        description: Nome do colaborador.
+      - name: cpf_colaborador
+        description: CPF do colaborador.
