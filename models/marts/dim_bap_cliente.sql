@@ -6,7 +6,7 @@ with
 
     , dim_cliente as (
         select
-            clientes.id_agencia,
+            clientes.id_cliente,
             clientes.nome_cliente,
             clientes.sobrenome_cliente,
             clientes.email_cliente,
@@ -16,7 +16,7 @@ with
 
     , dim_cliente_sk as (
         select
-            {{ dbt_utils.generate_surrogate_key(['id_agencia', 'email_cliente']) }} as cliente_sk,
+            {{ dbt_utils.generate_surrogate_key(['email_cliente','id_cliente']) }} as cliente_sk,
             *
         from dim_cliente
     )

@@ -66,7 +66,7 @@ with
         left join stg_contas
             on stg_transacoes.id_conta = stg_contas.id_conta
         left join dim_cliente
-            on stg_contas.id_cliente = dim_cliente.id_agencia
+            on stg_contas.id_cliente = dim_cliente.id_cliente
         left join dim_agencia
             on dim_cliente.id_agencia = dim_agencia.id_agencia
         left join stg_propostas_u

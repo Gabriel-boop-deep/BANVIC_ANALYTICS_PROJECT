@@ -25,7 +25,7 @@ models:
       - name: id_transacao
         description: Código da transação.
 
-      - name: num_conta
+      - name: id_conta
         description: Número da conta associada.
 
       - name: data_transacao

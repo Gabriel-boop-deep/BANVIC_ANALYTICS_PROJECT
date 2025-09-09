@@ -10,7 +10,14 @@ models:
           - not_null
           - unique
       - name: id_colaborador
+        description: Chave única do colaborador.
+        tests:
+          - not_null
+          - unique
+      - name: id_agencia
         description: Código do colaborador.
+        tests:
+          - not_null
       - name: nome_colaborador
         description: Nome do colaborador.
       - name: cpf_colaborador
