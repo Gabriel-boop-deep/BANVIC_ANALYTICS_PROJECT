@@ -14,67 +14,64 @@ with
         from {{ ref('dim_bap_colaborador') }}
     )
 
-    , dim_dates as (
-        select *
-        from {{ ref('dim_dates') }}
-    )
-
     , stg_transacoes as (
         select *
         from {{ ref('stg_bap_transacoes') }}
     )
 
-    , stg_contas as (
+    , fact_table as (
         select *
-        from {{ ref('stg_bap_contas') }}
+        from {{ ref('int_bap_proposta') }}
     )
 
-    , stg_propostas_u as (
+    , transacoes_filtradas as (
         select *
-        from {{ ref('stg_bap_propostas_credito') }}
+        from (
+            select *,
+                   row_number() over (partition by id_conta order by data_transacao desc) as rn
+            from stg_transacoes
+        )
+        where rn = 1
     )
 
     , joined_table as (
         select
             {{ dbt_utils.generate_surrogate_key([
-                'stg_transacoes.id_transacao',
-                'stg_contas.id_conta',
+                'fact_table.id_conta',
+                'fact_table.id_proposta',
                 'dim_cliente.cliente_sk',
                 'dim_agencia.agencia_sk'
             ]) }} as transacao_sk
 
-            , stg_transacoes.id_transacao
-            , stg_transacoes.id_conta
+            , transacoes_filtradas.id_transacao
+            , fact_table.id_conta
             , dim_cliente.cliente_sk as cliente_fk
             , dim_agencia.agencia_sk as agencia_fk
             , dim_colaborador.colaborador_sk as colaborador_fk
-            , dim_dates.metric_date as data_fk
-            , stg_transacoes.data_transacao
-            , stg_transacoes.tipo_transacao
-            , stg_transacoes.valor_transacao
 
-            , stg_contas.saldo_conta
-            , stg_contas.saldo_disponivel
-            , stg_contas.data_abertura_conta
+            , transacoes_filtradas.data_transacao
+            , transacoes_filtradas.tipo_transacao
+            , transacoes_filtradas.valor_transacao
 
-            , stg_propostas_u.valor_financiamento
-            , stg_propostas_u.valor_entrada
-            , stg_propostas_u.valor_prestacao
-            , stg_propostas_u.taxa_juros_mensal
-            , stg_propostas_u.status_proposta
-        from stg_transacoes
-        left join stg_contas
-            on stg_transacoes.id_conta = stg_contas.id_conta
+            , fact_table.saldo_conta
+            , fact_table.saldo_disponivel
+            , fact_table.data_abertura_conta
+
+            , fact_table.valor_financiamento
+            , fact_table.valor_entrada
+            , fact_table.valor_prestacao
+            , fact_table.taxa_juros_mensal
+            , fact_table.status_proposta
+        from fact_table
         left join dim_cliente
-            on stg_contas.id_cliente = dim_cliente.id_cliente
+            on dim_cliente.id_cliente = fact_table.id_cliente
         left join dim_agencia
-            on dim_cliente.id_agencia = dim_agencia.id_agencia
-        left join stg_propostas_u
-            on stg_contas.id_cliente = stg_propostas_u.id_cliente
+            on dim_agencia.id_agencia = fact_table.id_agencia
         left join dim_colaborador
-            on stg_propostas_u.id_colaborador = dim_colaborador.id_colaborador
-        left join dim_dates
-            on stg_transacoes.data_transacao = FORMAT_DATE('%d-%m-%Y', dim_dates.metric_date)
+            on dim_colaborador.id_colaborador = fact_table.id_colaborador
+                and dim_colaborador.id_agencia = fact_table.id_agencia
+        left join transacoes_filtradas
+            on transacoes_filtradas.id_conta = fact_table.id_conta
     )
 
     , fact_transacoes as (
@@ -83,7 +80,6 @@ with
             , cliente_fk
             , agencia_fk
             , colaborador_fk
-            , data_fk
             , id_transacao
             , id_conta
             , data_transacao

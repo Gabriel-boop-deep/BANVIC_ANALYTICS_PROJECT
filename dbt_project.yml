@@ -42,6 +42,6 @@ models:
       materialized: table
 
 seeds:
-  banvic_analytics_projectw: # <-- Name of the project. If you renamed your project you have to change this as well
+  banvic_analytics_project: # <-- Name of the project. If you renamed your project you have to change this as well
     banvic_seeds:
-      +schema: sap_bap
+      +schema: bap_data

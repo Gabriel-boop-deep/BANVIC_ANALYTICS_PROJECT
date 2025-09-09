@@ -1,0 +1,64 @@
+version: 2
+
+sources:
+  - name: bap_data
+    description: "Sales data from BANVIC"
+    schema: bap_data
+    tables:
+    - name: agencias
+      description: "State and province data, including unique identification number and state/province name."
+      columns:
+        - name: cod_agencia
+          description: It is a primary key from state province table.
+          tests:
+              - unique
+              - not_null                    
+    - name: clientes
+      description: "ISO standard codes and names for countries and regions."
+      columns:
+        - name: cod_cliente
+          description: It is a primary key from country table
+          tests:
+               - unique
+               - not_null
+    - name: colaborador_agencia
+      description: "Employee information such as salary, department, and title."
+      columns:
+        - name: cod_colaborador
+          description: It is a primary key from employee table
+          tests:
+               - not_null
+
+    - name: colaboradores
+      description: "Detailed customer data including names, credit limit, and salesperson reference."
+      columns:
+        - name: cod_colaborador
+          description: It is a foreign key from BusinessEntityID as a unique key from customer table
+          tests:
+               - unique
+               - not_null
+    - name: contas
+      description: "Street address data for customers, employees, and vendors."
+      columns:
+        - name: num_conta
+          description: It's a primary key from addresses table    
+          tests:
+             - unique
+             - not_null
+    - name: propostas_credito
+      description: "Human beings involved with AdventureWorks: employees, customer contacts, and vendor contacts."
+      columns:
+        - name: cod_proposta
+          description: It is a foreign key from BusinessEntityID as a unique key from person table
+          tests:
+            - unique
+            - not_null
+    - name: transacoes
+      description: "Details of products sold or used in the manufacturing of sold products, including name, product number, and color."
+      columns:
+        - name: cod_transacao
+          description: Primary key for Product records
+          tests:
+            - unique
+            - not_null
+    
