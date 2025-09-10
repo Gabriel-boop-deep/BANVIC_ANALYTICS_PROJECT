@@ -18,7 +18,7 @@ with
         select
            sa.id_agencia
            ,sc.id_conta  
-           ,spc.id_cliente  
+           ,spc.id_cliente
            ,spc.id_proposta  
            ,spc.id_colaborador  
            ,spc.taxa_juros_mensal
@@ -35,6 +35,7 @@ with
             on sc.id_cliente = spc.id_cliente
         left join stg_agencia sa
             on sa.id_colaborador = spc.id_colaborador
+
     )
 
 select *

@@ -14,6 +14,11 @@ with
         from {{ ref('dim_bap_colaborador') }}
     )
 
+    , dim_dates as (
+        select *
+        from {{ ref('dim_dates') }} 
+    )
+
     , stg_transacoes as (
         select *
         from {{ ref('stg_bap_transacoes') }}
@@ -50,13 +55,14 @@ with
             , dim_colaborador.colaborador_sk as colaborador_fk
 
             , transacoes_filtradas.data_transacao
+            , dim_dates.metric_date as data_fk
             , transacoes_filtradas.tipo_transacao
             , transacoes_filtradas.valor_transacao
 
             , fact_table.saldo_conta
             , fact_table.saldo_disponivel
+            , fact_table.data_proposta
             , fact_table.data_abertura_conta
-
             , fact_table.valor_financiamento
             , fact_table.valor_entrada
             , fact_table.valor_prestacao
@@ -72,6 +78,8 @@ with
                 and dim_colaborador.id_agencia = fact_table.id_agencia
         left join transacoes_filtradas
             on transacoes_filtradas.id_conta = fact_table.id_conta
+        left join dim_dates
+            on dim_dates.metric_date = date(fact_table.data_proposta)
     )
 
     , fact_transacoes as (
@@ -80,6 +88,7 @@ with
             , cliente_fk
             , agencia_fk
             , colaborador_fk
+            , data_fk
             , id_transacao
             , id_conta
             , data_transacao
@@ -88,6 +97,7 @@ with
             , saldo_conta
             , saldo_disponivel
             , data_abertura_conta
+            , data_proposta
             , valor_financiamento
             , valor_entrada
             , valor_prestacao
