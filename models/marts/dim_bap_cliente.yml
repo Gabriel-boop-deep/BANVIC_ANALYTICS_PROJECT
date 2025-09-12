@@ -19,3 +19,7 @@ models:
         description: Email cadastrado do cliente.
       - name: data_inclusao
         description: Data de inclusão no formato dd-mm-yyyy.
+      - name: endereco_cliente
+        description: Endereço do cliente
+      - name: cep_cliente
+        description: CEP do cliente.

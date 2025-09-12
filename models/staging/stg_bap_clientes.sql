@@ -12,6 +12,9 @@ with
            , Primeiro_nome as nome_cliente
            , Ultimo_nome as sobrenome_cliente
            , Email as email_cliente
+           , Endereco as endereco_cliente
+           , Cep as cep_cliente
+
         from source_clientes
     )
 

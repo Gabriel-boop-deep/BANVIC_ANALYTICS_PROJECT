@@ -16,4 +16,10 @@ models:
       - name: data_abertura
         description: Data de abertura da agência.
       - name: tipo_agencia
-        description: Tipo da agência.
+        description: Tipo da agência
+      - name: endereco_agencia
+        description: endereco da agencia
+      - name: cidade_agencia
+        description: cidade da agencia
+      - name: uf_agencia
+        description: uf da agencia   

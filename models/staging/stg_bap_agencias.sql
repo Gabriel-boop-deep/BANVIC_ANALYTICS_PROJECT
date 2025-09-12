@@ -10,6 +10,9 @@ with
            , nome as nome_agencia
            , data_abertura
            , tipo_agencia
+           , Endereco as endereco_agencia
+           , Cidade as cidade_agencia
+           , Uf as uf_agencia
         from source_agencia
     )
 

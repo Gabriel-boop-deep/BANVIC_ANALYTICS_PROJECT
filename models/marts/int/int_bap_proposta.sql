@@ -1,42 +1,94 @@
 with 
-    propostas_credito as (
+    dim_agencia as (
         select *
-        from {{ ref('stg_bap_propostas_credito') }}   
-    )
+        from {{ ref('dim_bap_agencia') }}
+    ),
 
-    , stg_conta as (
+    dim_cliente as (
         select *
-        from {{ ref('stg_bap_contas') }}  
-    )
+        from {{ ref('dim_bap_cliente') }}
+    ),
 
-    , stg_agencia as (
+    dim_colaborador as (
         select *
-        from {{ ref('stg_bap_colaborador_agencia')}}
-    )
-    
-    , int_propostas_credito as (
+        from {{ ref('dim_bap_colaborador') }}
+    ),
+
+    dim_dates as (
+        select *
+        from {{ ref('dim_dates') }}
+    ),
+
+    fact_table as (
+        select *
+        from {{ ref('int_bap_proposta') }}
+    ),
+
+    joined_table as (
         select
-           sa.id_agencia
-           ,sc.id_conta  
-           ,spc.id_cliente
-           ,spc.id_proposta  
-           ,spc.id_colaborador  
-           ,spc.taxa_juros_mensal
-           ,spc.valor_financiamento
-           ,spc.valor_entrada
-           ,spc.valor_prestacao
-           ,sc.saldo_conta
-           ,sc.saldo_disponivel
-           ,spc.status_proposta
-           ,spc.data_proposta
-           ,sc.data_abertura_conta
-        from propostas_credito spc
-        left join stg_conta sc
-            on sc.id_cliente = spc.id_cliente
-        left join stg_agencia sa
-            on sa.id_colaborador = spc.id_colaborador
+            {{ dbt_utils.generate_surrogate_key([
+                'fact_table.id_conta',
+                'fact_table.id_proposta',
+                'dim_cliente.cliente_sk',
+                'dim_agencia.agencia_sk',
+                'fact_table.data_transacao'
+            ]) }} as transacao_sk,
 
+            fact_table.id_transacao,
+            fact_table.id_conta,
+            dim_cliente.cliente_sk as cliente_fk,
+            dim_agencia.agencia_sk as agencia_fk,
+            dim_colaborador.colaborador_sk as colaborador_fk,
+
+            -- Corrigido: manter como DATE sem FORMAT_DATE
+            DATE(fact_table.data_transacao) as data_transacao,
+            dim_dates.metric_date as data_fk,
+
+            fact_table.valor_transacao,
+            fact_table.saldo_conta,
+            fact_table.saldo_disponivel,
+            fact_table.data_proposta,
+            fact_table.data_abertura_conta,
+            fact_table.valor_financiamento,
+            fact_table.valor_entrada,
+            fact_table.valor_prestacao,
+            fact_table.taxa_juros_mensal,
+            fact_table.status_proposta
+        from fact_table
+        left join dim_cliente
+            on dim_cliente.id_cliente = fact_table.id_cliente
+        left join dim_agencia
+            on dim_agencia.id_agencia = fact_table.id_agencia
+        left join dim_colaborador
+            on dim_colaborador.id_colaborador = fact_table.id_colaborador
+            and dim_colaborador.id_agencia = fact_table.id_agencia
+        left join dim_dates
+            on dim_dates.metric_date = DATE(fact_table.data_transacao)
+    ),
+
+    fact_transacoes as (
+        select
+            transacao_sk,
+            cliente_fk,
+            agencia_fk,
+            colaborador_fk,
+            data_fk,
+            id_transacao,
+            id_conta,
+            data_transacao,
+            valor_transacao,
+            saldo_conta,
+            saldo_disponivel,
+            data_abertura_conta,
+            data_proposta,
+            valor_financiamento,
+            valor_entrada,
+            valor_prestacao,
+            taxa_juros_mensal,
+            status_proposta,
+            valor_transacao * taxa_juros_mensal as custo_financeiro_estimado
+        from joined_table
     )
 
 select *
-from int_propostas_credito
+from fact_transacoes

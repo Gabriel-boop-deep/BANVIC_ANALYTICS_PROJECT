@@ -19,7 +19,7 @@ models:
       - name: colaborador_fk
         description: Chave estrangeira da dimensão de colaborador.
 
-      - name: date_fk
+      - name: data_fk
         description: Chave estrangeira da dimensão de datas.
 
       - name: id_transacao
@@ -30,9 +30,6 @@ models:
 
       - name: data_transacao
         description: Data da transação.
-
-      - name: tipo_transacao
-        description: Tipo da transação.
 
       - name: valor_transacao
         description: Valor da transação realizada.
@@ -45,6 +42,9 @@ models:
 
       - name: data_abertura_conta
         description: Data de abertura da conta.
+
+      - name: data_proposta
+        description: Data de criação da proposta de crédito.
 
       - name: valor_financiamento
         description: Valor total do financiamento proposto.
