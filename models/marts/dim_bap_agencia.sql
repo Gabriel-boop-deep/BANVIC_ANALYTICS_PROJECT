@@ -6,10 +6,13 @@ with
 
     , dim_agencia as (
         select
-            agencias.id_agencia,
-            agencias.nome_agencia,
-            agencias.data_abertura,
-            agencias.tipo_agencia
+            agencias.id_agencia
+            , agencias.nome_agencia
+            , agencias.data_abertura
+            , agencias.tipo_agencia
+            , agencias.endereco_agencia
+            , agencias.cidade_agencia
+            , agencias.uf_agencia
         from agencias
     )
 
