@@ -8,7 +8,7 @@ with
         select 
            Cod_transacao as id_transacao
            , Num_conta as id_conta
-           , FORMAT_DATE('%d-%m-%Y', DATE(Data_transacao)) AS data_transacao
+           , FORMAT_DATE('%Y-%m-%d', DATE(Data_transacao)) AS data_transacao
            , Nome_transacao as tipo_transacao
            , Valor_transacao as valor_transacao
         from source_transacoes

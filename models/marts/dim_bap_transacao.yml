@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: dim_bap_transacao
+    description: >
+      Modelo dimensional que representa transações com chave substituta gerada a partir do id_transacao.
+      Os dados são extraídos da tabela stg_bap_transacoes e refinados para uso analítico.
+    columns:
+      - name: transacao_sk
+        description: Chave substituta única da transação gerada via dbt_utils.generate_surrogate_key.
+        tests:
+          - not_null
+          - unique
+
+      - name: id_transacao
+        description: Identificador original da transação.
+        tests:
+          - not_null
+
+      - name: id_conta
+        description: Identificador da conta associada à transação.
+
+      - name: data_transacao
+        description: Data em que a transação ocorreu.
+
+      - name: tipo_transacao
+        description: Tipo da transação.
+
+      - name: valor_transacao
+        description: Valor monetário da transação.

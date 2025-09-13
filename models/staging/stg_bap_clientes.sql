@@ -8,7 +8,7 @@ with
         select 
            Cod_cliente as id_cliente
         --    ELECT
-           , FORMAT_DATE('%d-%m-%Y', DATE(Data_inclusao)) AS data_inclusao
+           , FORMAT_DATE('%Y-%m-%d', DATE(Data_inclusao)) AS data_inclusao
            , Primeiro_nome as nome_cliente
            , Ultimo_nome as sobrenome_cliente
            , Email as email_cliente

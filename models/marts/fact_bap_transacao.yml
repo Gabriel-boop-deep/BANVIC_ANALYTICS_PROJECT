@@ -1,0 +1,72 @@
+version: 2
+
+models:
+  - name: fact_bap_transacao
+    description: >
+      Tabela fato que consolida informações de transações financeiras, clientes, agências, colaboradores e propostas.
+      Inclui métricas como custo financeiro estimado e relacionamentos com dimensões por meio de chaves substitutas.
+    columns:
+      - name: metric_sk
+        description: Chave substituta única da métrica gerada a partir de múltiplos campos.
+        tests:
+          - not_null
+          - unique
+
+      - name: transacao_sk
+        description: Chave substituta da transação.
+        tests:
+          - not_null
+
+      - name: cliente_fk
+        description: Chave estrangeira para a dimensão de cliente.
+
+      - name: agencia_fk
+        description: Chave estrangeira para a dimensão de agência.
+
+      - name: colaborador_fk
+        description: Chave estrangeira para a dimensão de colaborador.
+
+      - name: data_fk
+        description: Chave estrangeira para a dimensão de datas.
+
+      - name: id_transacao
+        description: Identificador original da transação.
+
+      - name: id_conta
+        description: Identificador da conta associada.
+
+      - name: data_transacao
+        description: Data da transação.
+
+      - name: valor_transacao
+        description: Valor da transação realizada.
+
+      - name: saldo_conta
+        description: Saldo total da conta no momento da transação.
+
+      - name: saldo_disponivel
+        description: Saldo disponível para movimentação.
+
+      - name: data_abertura_conta
+        description: Data de abertura da conta.
+
+      - name: data_proposta
+        description: Data de criação da proposta de financiamento.
+
+      - name: valor_financiamento
+        description: Valor total do financiamento solicitado.
+
+      - name: valor_entrada
+        description: Valor pago como entrada no financiamento.
+
+      - name: valor_prestacao
+        description: Valor da prestação mensal do financiamento.
+
+      - name: taxa_juros_mensal
+        description: Taxa de juros mensal aplicada ao financiamento.
+
+      - name: status_proposta
+        description: Status atual da proposta
+
+      - name: custo_financeiro_estimado
+        description: Estimativa de custo financeiro calculada como valor_transacao * taxa_juros_mensal.
